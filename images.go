@@ -9,23 +9,16 @@ import (
 	"strings"
 )
 
-/**
- * Default Image in case the requested image
- * does not exist.
- * @type {String}
- */
+// Default Image in case the requested image
+// does not exist.
 var df string = ""
 
-/**
- * Get Default Image
- */
+// Get Default Image
 func DefaultImage() string {
 	return df
 }
 
-/**
- * Set Default Image
- */
+// Set Default Image
 func SetDefaultImage(img string) {
 	df = img
 }
@@ -40,11 +33,9 @@ func encode(bin []byte) []byte {
 	return encBuf[0:]
 }
 
-/**
- * Lightweight HTTP Client to fetch the image
- * Note: This will also pull webpages.
- * It is up to the user to use valid image urls.
- */
+// Lightweight HTTP Client to fetch the image
+// Note: This will also pull webpages. @todo
+// It is up to the user to use valid image urls.
 func get(url string) ([]byte, string) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -69,6 +60,7 @@ func get(url string) ([]byte, string) {
 	return get(DefaultImage())
 }
 
+// Begin a NewImage to fetch
 func NewImage(url string) string {
 	image, ct := get(cleanUrl(url))
 	enc := encode(image)
