@@ -28,7 +28,7 @@ url := imgbase64.NewImage("http://somedomain.com/animage.jpeg")
 
 # Notes
 
-* Please make sure your Default Image is a working image url. If your Default Image fails to load the package will `panic()`
+* Please make sure your Default Image is a working image url. If your Default Image fails to load the package will `panic()`. This was deliberate.
 
 # Todo
 
