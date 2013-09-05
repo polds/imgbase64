@@ -27,3 +27,13 @@ func TestCleanUrl(t *testing.T) {
 		t.Errorf("CleanUrl(%v) = %v, want %v", in, x, out)
 	}
 }
+
+/**
+ * Check if the failover succeeds
+ */
+func TestDefaultFailOver(t *testing.T) {
+	const in, out = "https://github.com/polds/imgbase64.png", ""
+	if x := NewImage(in); x != out {
+		t.Errorf("NewImage(%v) = %v, want %v", in, x, out)
+	}
+}
