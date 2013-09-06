@@ -30,7 +30,7 @@ func encode(bin []byte) []byte {
 	encBuf := make([]byte, maxEncLen)
 
 	e64.Encode(encBuf, bin)
-	return encBuf[0:]
+	return encBuf
 }
 
 // Lightweight HTTP Client to fetch the image
