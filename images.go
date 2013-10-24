@@ -79,7 +79,7 @@ func FromRemote(url string) string {
 	image, mime := get(cleanUrl(url))
 	enc := encode(image)
 
-	out = format(enc, mime)
+	out := format(enc, mime)
 	return out
 }
 
