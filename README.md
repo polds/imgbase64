@@ -1,5 +1,8 @@
 # imgbase64
 
+### This branch is not passing build! Please proceed carefully.
+
+
 [![Build Status](https://drone.io/github.com/polds/imgbase64/status.png)](https://drone.io/github.com/polds/imgbase64/latest)
 
 Convert an image to its base64 equivalent. [API Documentation](http://godoc.org/github.com/polds/imgbase64) on go.pkgdoc.org.

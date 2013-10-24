@@ -28,6 +28,12 @@ func TestCleanUrl(t *testing.T) {
 	}
 }
 
+func TestFromLocal(t *testing.T) {
+	if len(FromLocal("test.png")) == 0 {
+		t.Error("Length of encoding == 0")
+	}
+}
+
 // Check if the failover succeeds
 /*func TestDefaultFailOver(t *testing.T) {
 	const in, out = "https://github.com/polds/imgbase64.png", ""

@@ -1,11 +1,13 @@
 package imgbase64
 
 import (
+	"bytes"
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -60,14 +62,64 @@ func get(url string) ([]byte, string) {
 	return get(DefaultImage())
 }
 
+// DEPRECATED
 // Begin a NewImage to fetch
+// TODO: Deprecate NewImage
 func NewImage(url string) string {
-	image, ct := get(cleanUrl(url))
+	image, mime := get(cleanUrl(url))
 	enc := encode(image)
 
-	switch ct {
+	return make(enc, mime)
+}
+
+// FromRemote is a better named function that
+// presently calls NewImage which will be deprecated.
+// Function accepts an RFC compliant URL and returns
+// a base64 encoded result.
+func FromRemote(url string) string {
+	return NewImage(url)
+}
+
+// FromBuffer accepts a buffer and returns a
+// base64 encoded string.
+func FromBuffer(buf bytes.Buffer) string {
+	enc := encode(buf.Bytes())
+	mime := http.DetectContentType(buf.Bytes())
+
+	return make(enc, mime)
+}
+
+// FromLocal reads a local file and returns
+// the base64 encoded version.
+func FromLocal(fname string) string {
+	var b bytes.Buffer
+	finfo, err := os.Stat(fname)
+	if err != nil {
+		if os.IsNotExist(err) {
+			panic("File does not exist")
+		}
+		panic("Error stating file")
+	}
+
+	file, err := os.Open(fname)
+	if err != nil {
+		panic("Error opening file")
+	}
+
+	_, err = b.ReadFrom(file)
+	if err != nil {
+		panic("Error reading file to buffer")
+	}
+
+	return FromBuffer(b)
+}
+
+// make is an abstraction of the mime switch to create the
+// acceptable base64 string needed for browsers.
+func make(enc []byte, mime string) string {
+	switch mime {
 	case "image/gif", "image/jpeg", "image/pjpeg", "image/png", "image/tiff":
-		return fmt.Sprintf("data:%s;base64,%s", ct, enc)
+		return fmt.Sprintf("data:%s;base64,%s", mime, enc)
 	default:
 	}
 
