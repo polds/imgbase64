@@ -67,12 +67,8 @@ func get(url string) ([]byte, string) {
 // DEPRECATED
 // Begin a NewImage to fetch
 // TODO: Deprecate NewImage
-func NewImage(url string) (out string) {
-	image, mime := get(cleanUrl(url))
-	enc := encode(image)
-
-	out = format(enc, mime)
-	return
+func NewImage(url string) string {
+	return FromRemote(url)
 }
 
 // FromRemote is a better named function that
@@ -80,7 +76,11 @@ func NewImage(url string) (out string) {
 // Function accepts an RFC compliant URL and returns
 // a base64 encoded result.
 func FromRemote(url string) string {
-	return NewImage(url)
+	image, mime := get(cleanUrl(url))
+	enc := encode(image)
+
+	out = format(enc, mime)
+	return out
 }
 
 // FromBuffer accepts a buffer and returns a
