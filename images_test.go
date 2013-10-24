@@ -1,7 +1,6 @@
 package imgbase64
 
 import (
-	"fmt"
 	"testing"
 )
 
