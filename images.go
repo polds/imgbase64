@@ -94,27 +94,27 @@ func FromBuffer(buf bytes.Buffer) string {
 
 // FromLocal reads a local file and returns
 // the base64 encoded version.
-func FromLocal(fname string) string {
+func FromLocal(fname string) (string, error) {
 	var b bytes.Buffer
 	_, err := os.Stat(fname)
 	if err != nil {
 		if os.IsNotExist(err) {
-			panic("File does not exist")
+			return "", fmt.Errorf("File does not exist\n")
 		}
 		panic("Error stating file")
 	}
 
 	file, err := os.Open(fname)
 	if err != nil {
-		panic("Error opening file")
+		return "", fmt.Errorf("Error opening file\n")
 	}
 
 	_, err = b.ReadFrom(file)
 	if err != nil {
-		panic("Error reading file to buffer")
+		return "", fmt.Errorf("Error reading file to buffer\n")
 	}
 
-	return FromBuffer(b)
+	return FromBuffer(b), nil
 }
 
 // format is an abstraction of the mime switch to create the
