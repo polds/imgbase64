@@ -94,14 +94,12 @@ func FromBuffer(buf bytes.Buffer) string {
 
 // FromLocal reads a local file and returns
 // the base64 encoded version.
-func FromLocal(fname string) (string, error) {
+func FromLocal(fname string) (str string, err error) {
 	var b bytes.Buffer
-	_, err := os.Stat(fname)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return "", fmt.Errorf("File does not exist\n")
-		}
-		panic("Error stating file")
+
+	fileExists, _ := exists(fname)
+	if !fileExists {
+		return "", fmt.Errorf("File does not exist\n")
 	}
 
 	file, err := os.Open(fname)
@@ -132,4 +130,16 @@ func format(enc []byte, mime string) string {
 // cleanUrl converts whitespace in urls to %20
 func cleanUrl(s string) string {
 	return strings.Replace(s, " ", "%20", -1)
+}
+
+// exists returns whether the given file or directory exists or not
+func exists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }
