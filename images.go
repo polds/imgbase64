@@ -94,7 +94,7 @@ func FromBuffer(buf bytes.Buffer) string {
 
 // FromLocal reads a local file and returns
 // the base64 encoded version.
-func FromLocal(fname string) (str string, err error) {
+func FromLocal(fname string) (string, error) {
 	var b bytes.Buffer
 
 	fileExists, _ := exists(fname)
