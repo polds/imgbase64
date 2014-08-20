@@ -94,27 +94,25 @@ func FromBuffer(buf bytes.Buffer) string {
 
 // FromLocal reads a local file and returns
 // the base64 encoded version.
-func FromLocal(fname string) string {
+func FromLocal(fname string) (string, error) {
 	var b bytes.Buffer
-	_, err := os.Stat(fname)
-	if err != nil {
-		if os.IsNotExist(err) {
-			panic("File does not exist")
-		}
-		panic("Error stating file")
+
+	fileExists, _ := exists(fname)
+	if !fileExists {
+		return "", fmt.Errorf("File does not exist\n")
 	}
 
 	file, err := os.Open(fname)
 	if err != nil {
-		panic("Error opening file")
+		return "", fmt.Errorf("Error opening file\n")
 	}
 
 	_, err = b.ReadFrom(file)
 	if err != nil {
-		panic("Error reading file to buffer")
+		return "", fmt.Errorf("Error reading file to buffer\n")
 	}
 
-	return FromBuffer(b)
+	return FromBuffer(b), nil
 }
 
 // format is an abstraction of the mime switch to create the
@@ -132,4 +130,16 @@ func format(enc []byte, mime string) string {
 // cleanUrl converts whitespace in urls to %20
 func cleanUrl(s string) string {
 	return strings.Replace(s, " ", "%20", -1)
+}
+
+// exists returns whether the given file or directory exists or not
+func exists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }
